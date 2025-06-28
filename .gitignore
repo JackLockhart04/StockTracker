@@ -1,0 +1,4 @@
+apiStuff/
+venv/
+__pycache__/
+*.xlsx
