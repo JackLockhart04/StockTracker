@@ -1,21 +1,11 @@
 import json
 import requests
 from datetime import datetime, timezone, timedelta
+from api_key_manager import get_stockdata_key
 
 class StockDataHandler:
-    _api_token = None
     _StockDataOrg_base_url = "https://api.stockdata.org/v1/data/eod"
     _AlphaVantage_base_url = "https://www.alphavantage.co/query"
-    
-    @classmethod
-    def set_api_token(cls, api_token):
-        """Set the API token globally"""
-        cls._api_token = api_token
-    
-    @classmethod
-    def get_api_token(cls):
-        """Get the current API token"""
-        return cls._api_token
     
     @staticmethod
     def print_open_close_prices(prices):
@@ -114,15 +104,18 @@ class StockDataHandler:
 
     @classmethod
     def get_stock_data_from_StockDataOrg(cls, symbol, date_from, date_to=None):
-        if not cls._api_token:
-            print("Error: API token not provided. Use StockDataHandler.set_api_token() first.")
+        # Get API key directly from manager
+        api_token = get_stockdata_key()
+        
+        if not api_token:
+            print("Error: API token not found. Check your apiStuff/keys.txt file.")
             return {}
         
         # Build API URL
         url = f"{cls._StockDataOrg_base_url}?symbols={symbol}&date_from={date_from}"
         if date_to:
             url += f"&date_to={date_to}"
-        url += f"&api_token={cls._api_token}"
+        url += f"&api_token={api_token}"
         
         try:
             response = requests.get(url)
@@ -131,6 +124,7 @@ class StockDataHandler:
             # Parse the response
             response_json = cls.parse_StockDataOrg_data(response.json())
             return response_json
+            
         except requests.exceptions.RequestException as e:
             print(f"Error fetching data from API: {e}")
             return {}
@@ -151,15 +145,18 @@ class StockDataHandler:
        
     @classmethod
     def get_stock_data_from_AlphaVantage(cls, symbol, date_from, date_to=None):
-        if not cls._api_token:
-            print("Error: API token not provided. Use StockDataHandler.set_api_token() first.")
+        # Get API key directly from manager
+        api_token = get_stockdata_key()
+        
+        if not api_token:
+            print("Error: API token not found. Check your apiStuff/keys.txt file.")
             return {}
         
         # Build API URL
         url = f"{cls._AlphaVantage_base_url}?function=TIME_SERIES_DAILY"
         url += f"&symbol={symbol}"
         url += f"&outputsize=compact"
-        url += f"&apikey={cls._api_token}"
+        url += f"&apikey={api_token}"
         
         try:
             response = requests.get(url)
@@ -178,8 +175,10 @@ if __name__ == "__main__":
     stock_data = json.loads(stock_data)
     print(type(stock_data))
     
-    handler = StockDataHandler(api_token='13kRSGqjRZMYdj77eoAqhfDv5UXOHC9igGaOreb0')
+    # Note: Set API token before making API calls
+    # StockDataHandler.set_api_token('your_api_token_here')
+    
     stock_symbol = 'META'
     # stock_data = handler.get_stock_data_from_api(stock_symbol, '2025-06-15', '2025-06-23')
-    prices = handler.parse_StockDataOrg_data(stock_data)
-    handler.print_open_close_prices(prices) 
+    prices = StockDataHandler.parse_stock_data(stock_data)
+    StockDataHandler.print_open_close_prices(prices) 

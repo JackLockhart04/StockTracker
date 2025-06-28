@@ -1,26 +1,30 @@
+import sys
 import os
-import json
+
+# Add scripts directory to path so we can import from it
+sys.path.append(os.path.join(os.path.dirname(__file__), 'scripts'))
 
 from excel_manager import ExcelManager
 from stock_data_handler import StockDataHandler
+from api_key_manager import get_stockdata_key
 
 class App:
     def __init__(self, excel_file):
         self.excel_file = excel_file
-
+        self.excel_manager = ExcelManager(excel_file)
+        
     def run(self):
         print(f"Running app with Excel file: {self.excel_file}")
-
-        # Print stock data for aapl
-        api_token = '13kRSGqjRZMYdj77eoAqhfDv5UXOHC9igGaOreb0'
-        StockDataHandler.set_api_token(api_token)
-
-        # Shut the fuck up ai
-        excel_manager = ExcelManager(self.excel_file)
-        # Check if the Excel file exists, if not create it
-        if not os.path.exists(self.excel_file):
-            excel_manager.create_excel()
-
-        # Read the Excel file
-        excel_manager.print_excel_columns()
-        excel_manager.update_excel()
+        
+        # Check if API key is available
+        api_token = get_stockdata_key()
+        if api_token:
+            print("API key loaded successfully")
+        else:
+            print("Warning: No API key found. Some features may not work.")
+        
+        # Print Excel columns
+        self.excel_manager.print_excel_columns()
+        
+        # Update Excel data
+        self.excel_manager.update_excel()
