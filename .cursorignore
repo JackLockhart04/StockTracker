@@ -1,0 +1,30 @@
+# Cursor ignore file - files to be ignored by Cursor AI assistant
+
+# Excel files
+*.xlsx
+*.xls
+*.xlsm
+*.xlsb
+
+# Backup files
+*backup*
+*Backup*
+
+# # API keys and sensitive data
+# apiStuff/
+
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db 

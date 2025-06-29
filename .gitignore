@@ -1,4 +1,82 @@
-apiStuff/
+# Virtual Environment
 venv/
+env/
+.venv/
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# API Keys and Sensitive Data
+src/stock_tracker/config/api_credentials/
+**/keys.txt
+**/api_keys.txt
+**/credentials.txt
+**/secrets.txt
+*.key
+*.pem
+*.p12
+
+# Excel Files
 *.xlsx
+*.xls
+*.xlsm
+*.xlsb
+*.csv
+
+# Backup Files
+*backup*
+*Backup*
+*.bak
+*.backup
+
+# Logs
+logs/
+*.log
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary Files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.staging
+
+# Configuration Files with Sensitive Data
+config.ini
+settings.json
+secrets.json
